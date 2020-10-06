@@ -49,6 +49,17 @@ void DrawBoard::setInsertMode(const QString &insertModeString)
     insertMode = stringToInsertMode[insertModeString];
 }
 
+QVector<Shape*> DrawBoard::getShapes() const
+{
+    return myShapes;
+}
+
+void DrawBoard::setShapes(QVector<Shape*> shapes)
+{
+    myShapes = shapes;
+    update();
+}
+
 void DrawBoard::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
@@ -212,7 +223,11 @@ std::map<QString, DrawBoard::InsertMode> DrawBoard::stringToInsertMode =
 
 QDataStream &operator<<(QDataStream &out, const QVector<Shape*> &vectorShape)
 {
-    for (Shape *shape : vectorShape) out << *shape;
+    for (Shape *shape : vectorShape)
+    {
+        shape->deselect();
+        out << *shape;
+    }
     return out;
 }
 
@@ -221,7 +236,7 @@ QDataStream &operator>>(QDataStream &in, QVector<Shape*> &vectorShape)
     while (!in.atEnd()) {
         Shape *shape = nullptr;
         in >> *shape;
-        vectorShape += shape;
+        if (shape != nullptr) vectorShape += shape;
     }
     return in;
 }

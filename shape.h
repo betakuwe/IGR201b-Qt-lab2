@@ -6,10 +6,10 @@
 class Shape
 {
 public:
-    Shape(const QPointF &p1, const QPointF &p2, const QPen &pen);
+    Shape(const QPointF p1, const QPointF p2, const QPen pen);
     virtual void draw(QPainter &painter) const = 0;
-    virtual bool select(const QPointF &point) = 0;
-    virtual void move(const QPointF &from, const QPointF &to) = 0;
+    virtual bool select(const QPointF point) = 0;
+    virtual void move(const QPointF from, const QPointF to) = 0;
     virtual QString getShapeName() const = 0;
 
     void setPen(const QPen pen);

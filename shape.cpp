@@ -4,8 +4,10 @@
 #include "shaperectangle.h"
 #include "shapeellipse.h"
 #include "drawboard.h"
+#include <QPen>
+#include <QDebug>
 
-Shape::Shape(const QPointF &p1, const QPointF &p2, const QPen &pen) :
+Shape::Shape(const QPointF p1, const QPointF p2, const QPen pen) :
     pen{ pen },
     isSelected{ false },
     p1{ p1 },
@@ -54,7 +56,10 @@ void Shape::deselect()
 
 QDataStream &operator<<(QDataStream &out, const Shape &shape)
 {
-    out << shape.getP1() << shape.getP2() << shape.getPen() << shape.getShapeName();
+    out << shape.getP1()
+        << shape.getP2()
+        << shape.getPen()
+        << DrawBoard::stringToInsertMode[shape.getShapeName()];
     return out;
 }
 
@@ -64,8 +69,9 @@ QDataStream &operator>>(QDataStream &in, Shape &shape)
     QPointF p2;
     QPen pen;
     QString shapeName;
-    in >> p1 >> p2 >> pen >> shapeName;
-    switch (DrawBoard::stringToInsertMode[shapeName]) {
+    DrawBoard::InsertMode insertMode;
+    in >> p1 >> p2 >> pen >> insertMode;
+    switch (insertMode) {
     case DrawBoard::InsertMode::Line:
         shape = ShapeLine(p1, p2, pen);
         break;

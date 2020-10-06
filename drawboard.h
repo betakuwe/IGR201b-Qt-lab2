@@ -19,6 +19,8 @@ public:
     void setStyle(const QString &styleString);
     void setMode(const QString &modeString);
     void setInsertMode(const QString &insertModeString);
+    QVector<Shape*> getShapes() const;
+    void setShapes(QVector<Shape*> shapes);
 
     static std::map<QString, Qt::PenStyle> stringToPenStyle;
     static std::map<Qt::PenStyle, QString> penStyleToString;

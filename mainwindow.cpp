@@ -118,35 +118,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionOpen_triggered()
 {
-    /*
-    qDebug() << "Open File";
-    QString fileName{ QFileDialog::getOpenFileName(this, tr("Open File"), "./", tr("HTML files (*.html)")) };
-    qDebug() << fileName;
+    QString fileName{ QFileDialog::getOpenFileName(this, tr("Open File"), "./") };
     QFile file{ fileName };
     if (file.open(QIODevice::ReadOnly))
     {
-        QTextStream out{ &file };
-        QString text(out.readAll());
-        textEdit->setHtml(text);
+        QDataStream in{ &file };
+        QVector<Shape*> shapes;
+        in >> shapes;
+        drawboard->setShapes(shapes);
         file.close();
     }
-    */
 }
 
 void MainWindow::on_actionSave_triggered()
 {
-    /*
-    qDebug() << "Save File";
-    QString fileName{ QFileDialog::getSaveFileName(this, tr("Save File"), "./untitled.html", tr("HTML files (*.html)")) };
-    qDebug() << fileName;
+    QString fileName{ QFileDialog::getSaveFileName(this, tr("Save File"), "./untitled") };
     QFile file{ fileName };
     if (file.open(QIODevice::WriteOnly))
     {
-        QTextStream out{ &file };
-        out << textEdit->toHtml();
+        QDataStream out{ &file };
+        out << drawboard->getShapes();
         file.close();
     }
-*/
 }
 
 void MainWindow::on_actionQuit_triggered()
